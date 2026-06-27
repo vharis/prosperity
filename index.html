@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prosperity — Guidewire Insurance Technology Consulting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --bg:           #0D0C09;
+      --surface-1:    #131209;
+      --surface-2:    #1A1812;
+      --surface-3:    #211F17;
+      --cream:        #F2EDE4;
+      --cream-dim:    rgba(242,237,228,0.55);
+      --cream-ghost:  rgba(242,237,228,0.07);
+      --gold:         #C8952A;
+      --gold-mid:     rgba(200,149,42,0.25);
+      --gold-dim:     rgba(200,149,42,0.12);
+      --gold-line:    rgba(200,149,42,0.35);
+      --border:       rgba(242,237,228,0.07);
+      --border-md:    rgba(242,237,228,0.13);
+
+      --serif:  'Playfair Display', Georgia, serif;
+      --sans:   'Inter', -apple-system, Helvetica Neue, sans-serif;
+      --mono:   'Space Mono', 'Courier New', monospace;
+
+      --max:    1300px;
+      --pad:    clamp(1.5rem, 5vw, 5rem);
+      --radius: 0px;
+    }
+
+    /* ============================================================
+       RESET + BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem var(--pad);
+      background: rgba(13,12,9,0.82);
+      backdrop-filter: blur(24px) saturate(1.2);
+      -webkit-backdrop-filter: blur(24px) saturate(1.2);
+      border-bottom: 1px solid var(--border);
+      transition: border-color 0.3s;
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--cream);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.1em;
+    }
+    .nav-logo-p {
+      color: var(--gold);
+    }
+
+    .nav-center {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-center a {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-center a:hover { color: var(--cream); }
+
+    .nav-engage {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      padding: 0.55rem 1.3rem;
+      border: 1px solid var(--gold-line);
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-engage:hover {
+      background: var(--gold-dim);
+    }
+
+    @media (max-width: 768px) {
+      .nav-center { display: none; }
+    }
+
+    /* ============================================================
+       SHARED SECTION SCAFFOLDING
+    ============================================================ */
+    .section-wrap {
+      padding: clamp(5rem, 10vw, 9rem) var(--pad);
+    }
+    .section-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.6rem;
+    }
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .sec-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      margin-bottom: 1.2rem;
+    }
+
+    .sec-sub {
+      font-size: 0.975rem;
+      color: var(--cream-dim);
+      max-width: 580px;
+      line-height: 1.85;
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    #hero {
+      min-height: 100svh;
+      padding: 0 var(--pad);
+      padding-top: 5.5rem;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Ambient glow */
+    #hero::after {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 60vw;
+      height: 60vw;
+      max-width: 700px;
+      max-height: 700px;
+      background: radial-gradient(ellipse, rgba(200,149,42,0.055) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      max-width: var(--max);
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2.2rem;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.6rem, 4.8vw, 5rem);
+      font-weight: 900;
+      line-height: 1.03;
+      letter-spacing: -0.025em;
+      color: var(--cream);
+      margin-bottom: 2rem;
+    }
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-body {
+      font-size: clamp(0.95rem, 1.4vw, 1.08rem);
+      color: var(--cream-dim);
+      line-height: 1.85;
+      max-width: 540px;
+      margin-bottom: 3rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.9rem;
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--gold);
+      padding: 0.95rem 2rem;
+      text-decoration: none;
+      transition: background 0.25s, transform 0.25s;
+      border: none;
+    }
+    .hero-cta:hover {
+      background: #daa832;
+      transform: translateY(-2px);
+    }
+    .hero-cta-arr { transition: transform 0.25s; }
+    .hero-cta:hover .hero-cta-arr { transform: translateX(4px); }
+
+    /* Hero stats ledger */
+    .hero-ledger {
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--border-md);
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .ledger-entry {}
+    .ledger-value {
+      font-family: var(--mono);
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .ledger-value .accent { color: var(--gold); }
+    .ledger-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      margin-top: 0.45rem;
+    }
+
+    /* Hero visual */
+    .hero-visual {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-diagram {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+    }
+    @media (max-width: 480px) {
+      .hero-ledger { gap: 1.5rem; }
+    }
+
+    /* ============================================================
+       METHODOLOGY
+    ============================================================ */
+    #methodology {
+      background: var(--surface-1);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .method-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: end;
+      margin-bottom: 4rem;
+    }
+
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--border);
+    }
+
+    .bento-cell {
+      padding: clamp(2rem, 3.5vw, 3rem);
+      border-right: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.35s;
+    }
+    .bento-cell:last-child { border-right: none; }
+
+    .bento-cell::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+    }
+    .bento-cell:hover::after { transform: scaleX(1); }
+    .bento-cell:hover { background: var(--surface-2); }
+
+    .bento-index {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      margin-bottom: 2rem;
+    }
+
+    .bento-icon-wrap {
+      width: 42px;
+      height: 42px;
+      margin-bottom: 1.8rem;
+    }
+
+    .bento-name {
+      font-family: var(--serif);
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.05;
+      margin-bottom: 1rem;
+    }
+    .bento-name em { font-style: italic; color: var(--gold); }
+
+    .bento-copy {
+      font-size: 0.875rem;
+      color: var(--cream-dim);
+      line-height: 1.85;
+      margin-bottom: 2rem;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .chip {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      border: 1px solid var(--border-md);
+      padding: 0.25rem 0.6rem;
+    }
+
+    @media (max-width: 900px) {
+      .method-header { grid-template-columns: 1fr; gap: 1.5rem; }
+      .bento { grid-template-columns: 1fr; }
+      .bento-cell { border-right: none; border-bottom: 1px solid var(--border); }
+      .bento-cell:last-child { border-bottom: none; }
+    }
+    @media (min-width: 600px) and (max-width: 900px) {
+      .bento { grid-template-columns: 1fr 1fr; }
+      .bento-cell:nth-child(2) { border-right: none; }
+      .bento-cell:nth-child(odd) { border-right: 1px solid var(--border); }
+    }
+
+    /* ============================================================
+       IMPACT
+    ============================================================ */
+    #impact {
+      background: var(--bg);
+    }
+
+    .impact-head {
+      margin-bottom: 5rem;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 3rem;
+      align-items: end;
+    }
+
+    .impact-row {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      padding: clamp(3rem, 5vw, 4.5rem) 0;
+      border-top: 1px solid var(--border);
+      align-items: start;
+    }
+
+    /* Ledger-style metric (the signature element) */
+    .metric-block {
+      position: sticky;
+      top: 7rem;
+    }
+    .metric-record {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+      color: var(--cream-dim);
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: 0.6rem;
+    }
+    .metric-val {
+      font-family: var(--mono);
+      font-size: clamp(2.4rem, 4vw, 3.5rem);
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .metric-desc {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      margin-top: 0.55rem;
+      line-height: 1.5;
+    }
+    .metric-badge {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold-line);
+      padding: 0.28rem 0.7rem;
+      margin-top: 1.2rem;
+    }
+
+    .impact-content {}
+    .impact-title {
+      font-family: var(--serif);
+      font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 2rem;
+    }
+
+    .sar-block { margin-bottom: 1.6rem; }
+    .sar-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.45rem;
+    }
+    .sar-text {
+      font-size: 0.925rem;
+      color: var(--cream-dim);
+      line-height: 1.85;
+    }
+
+    @media (max-width: 768px) {
+      .impact-head { grid-template-columns: 1fr; gap: 1.5rem; }
+      .impact-row { grid-template-columns: 1fr; }
+      .metric-block { position: static; }
+    }
+
+    /* ============================================================
+       LEGACY
+    ============================================================ */
+    #legacy {
+      background: var(--surface-1);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mantra-section {
+      padding-bottom: 4.5rem;
+      margin-bottom: 4.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .quote-glyph {
+      display: block;
+      font-family: var(--serif);
+      font-size: 7rem;
+      line-height: 0.6;
+      color: var(--gold);
+      opacity: 0.2;
+      margin-bottom: 1.8rem;
+      user-select: none;
+    }
+
+    .mantra-text {
+      font-family: var(--serif);
+      font-size: clamp(1.35rem, 2.8vw, 2.1rem);
+      font-weight: 700;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.45;
+      max-width: 860px;
+    }
+
+    .mantra-attr {
+      margin-top: 2rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .mantra-attr::before { content: '— '; }
+
+    .legacy-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--border);
+    }
+
+    .l-card {
+      background: var(--surface-1);
+      padding: clamp(2rem, 3vw, 2.75rem);
+      transition: background 0.3s;
+    }
+    .l-card:hover { background: var(--surface-2); }
+
+    .l-card-icon {
+      margin-bottom: 1.5rem;
+      opacity: 0.75;
+    }
+
+    .l-card-title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    .l-card-body {
+      font-size: 0.875rem;
+      color: var(--cream-dim);
+      line-height: 1.85;
+    }
+
+    @media (max-width: 768px) {
+      .legacy-cards { grid-template-columns: 1fr; }
+    }
+    @media (min-width: 540px) and (max-width: 768px) {
+      .legacy-cards { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ============================================================
+       CONNECT / CTA
+    ============================================================ */
+    #connect {
+      background: var(--bg);
+      text-align: center;
+    }
+
+    .connect-title {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+    .connect-title em { font-style: italic; color: var(--gold); }
+
+    .connect-sub {
+      font-size: 1rem;
+      color: var(--cream-dim);
+      line-height: 1.85;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-fill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--gold);
+      padding: 1rem 2rem;
+      text-decoration: none;
+      border: 1px solid var(--gold);
+      transition: background 0.22s, color 0.22s;
+    }
+    .btn-fill:hover {
+      background: transparent;
+      color: var(--gold);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      background: transparent;
+      padding: 1rem 2rem;
+      text-decoration: none;
+      border: 1px solid var(--border-md);
+      transition: color 0.22s, border-color 0.22s;
+    }
+    .btn-ghost:hover {
+      color: var(--cream);
+      border-color: var(--border-md);
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      padding: 2.5rem var(--pad);
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--cream-dim);
+      letter-spacing: 0.03em;
+    }
+    .footer-logo span { color: var(--gold); }
+
+    .footer-nav {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .footer-nav a {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-nav a:hover { color: var(--gold); }
+
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--cream-dim);
+      opacity: 0.35;
+    }
+
+    @media (max-width: 680px) {
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    }
+
+    /* ============================================================
+       SCROLL REVEAL
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition:
+        opacity  0.75s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
+    .d5 { transition-delay: 0.4s; }
+    .d6 { transition-delay: 0.48s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* Page-load hero entrance */
+    .hero-enter {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .he-2 { animation-delay: 0.15s; }
+    .he-3 { animation-delay: 0.28s; }
+    .he-4 { animation-delay: 0.42s; }
+    .he-5 { animation-delay: 0.56s; }
+    .he-6 { animation-delay: 0.7s; }
+
+    @keyframes heroIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Diagram orbit animation */
+    .orbit-slow { animation: spin 60s linear infinite; transform-origin: 250px 250px; }
+    .orbit-mid  { animation: spin 30s linear infinite reverse; transform-origin: 250px 250px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Ping pulse on diagram center */
+    .ping {
+      animation: ping 2.4s ease-out infinite;
+      transform-origin: 250px 250px;
+    }
+    @keyframes ping {
+      0%, 100% { opacity: 0.5; r: 28px; }
+      50%       { opacity: 0; r: 48px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .orbit-slow, .orbit-mid { animation: none; }
+      .ping { animation: none; }
+    }
+
+    /* ============================================================
+       MISC UTILITIES
+    ============================================================ */
+    .rule { height: 1px; background: var(--border); }
+  </style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<nav id="top-nav">
+  <a class="nav-logo" href="#hero">
+    <span class="nav-logo-p">P</span>rosperity
+  </a>
+  <ul class="nav-center">
+    <li><a href="#methodology">Methodology</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#legacy">Leadership</a></li>
+    <li><a href="#connect">Advisory</a></li>
+  </ul>
+  <a class="nav-engage" href="#connect">Engage</a>
+</nav>
+
+
+<!-- ============================================================
+     01 — HERO
+============================================================ -->
+<section id="hero" class="section-wrap" style="padding-top: 5rem; padding-bottom: 3rem; min-height: 100svh; display: flex; align-items: center;">
+  <div class="hero-grid">
+    <!-- Left: Copy -->
+    <div class="hero-text">
+      <div class="hero-tag hero-enter">
+        Guidewire Insurance Technology Consulting
+      </div>
+
+      <h1 class="hero-h1 hero-enter he-2">
+        Sixteen Years.<br>
+        Three Guidewire Suites.<br>
+        One Standard: Implementations<br>
+        That <em>Don't&nbsp;Fail.</em>
+      </h1>
+
+      <p class="hero-body hero-enter he-3">
+        16+ years of deep P&C insurance technology experience across PolicyCenter, BillingCenter, and ClaimCenter — from developer to solution architect, across personal, commercial, and specialty lines, for carriers at every scale.
+      </p>
+
+      <a href="#methodology" class="hero-cta hero-enter he-4">
+        Review the Frameworks
+        <span class="hero-cta-arr">→</span>
+      </a>
+
+      <!-- Ledger stats — the signature design element -->
+      <div class="hero-ledger hero-enter he-5">
+        <div class="ledger-entry">
+          <div class="ledger-value">16<span class="accent">+</span></div>
+          <div class="ledger-label">Years Guidewire<br>Delivery</div>
+        </div>
+        <div class="ledger-entry">
+          <div class="ledger-value" style="letter-spacing:0;">3<span class="accent">×</span></div>
+          <div class="ledger-label">Core Suites<br>Mastered</div>
+        </div>
+        <div class="ledger-entry">
+          <div class="ledger-value" style="font-size:1.5rem; padding-top:0.2rem;">P&amp;C</div>
+          <div class="ledger-label">All Lines &<br>Carrier Sizes</div>
+        </div>
+        <div class="ledger-entry">
+          <div class="ledger-value" style="font-size:1.1rem; padding-top:0.4rem;">ARCH</div>
+          <div class="ledger-label">Solution &<br>Enterprise</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Abstract architectural diagram -->
+    <div class="hero-visual hero-enter he-4">
+      <svg class="hero-diagram" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Background grid -->
+        <defs>
+          <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(242,237,228,0.04)" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <rect width="500" height="500" fill="url(#grid)"/>
+
+        <!-- Outer orbit ring (animated) -->
+        <circle class="orbit-slow" cx="250" cy="250" r="200" stroke="rgba(200,149,42,0.12)" stroke-width="1" stroke-dasharray="3 9"/>
+
+        <!-- Mid ring -->
+        <circle class="orbit-mid" cx="250" cy="250" r="145" stroke="rgba(242,237,228,0.06)" stroke-width="0.5" stroke-dasharray="1 12"/>
+
+        <!-- Inner ring -->
+        <circle cx="250" cy="250" r="88" stroke="rgba(200,149,42,0.2)" stroke-width="0.75"/>
+
+        <!-- Ping pulse -->
+        <circle class="ping" cx="250" cy="250" r="28" fill="none" stroke="rgba(200,149,42,0.35)" stroke-width="0.75"/>
+
+        <!-- Center node -->
+        <circle cx="250" cy="250" r="7" fill="#C8952A" opacity="0.9"/>
+        <circle cx="250" cy="250" r="14" fill="none" stroke="#C8952A" stroke-width="0.75" opacity="0.4"/>
+
+        <!-- Cardinal nodes with labels -->
+        <!-- POLICY — top -->
+        <circle cx="250" cy="50" r="9" fill="rgba(200,149,42,0.7)"/>
+        <circle cx="250" cy="50" r="16" fill="none" stroke="rgba(200,149,42,0.25)" stroke-width="0.75"/>
+        <line x1="250" y1="66" x2="250" y2="236" stroke="rgba(200,149,42,0.3)" stroke-width="0.75"/>
+        <text x="250" y="32" fill="#C8952A" font-family="Space Mono,monospace" font-size="8.5" text-anchor="middle" opacity="0.8">POLICY</text>
+
+        <!-- BILLING — right -->
+        <circle cx="450" cy="250" r="9" fill="rgba(242,237,228,0.15)"/>
+        <circle cx="450" cy="250" r="16" fill="none" stroke="rgba(242,237,228,0.08)" stroke-width="0.75"/>
+        <line x1="434" y1="250" x2="264" y2="250" stroke="rgba(242,237,228,0.1)" stroke-width="0.75"/>
+        <text x="468" y="254" fill="rgba(242,237,228,0.4)" font-family="Space Mono,monospace" font-size="8.5" text-anchor="start">BILLING</text>
+
+        <!-- CLAIMS — bottom -->
+        <circle cx="250" cy="450" r="9" fill="rgba(200,149,42,0.5)"/>
+        <circle cx="250" cy="450" r="16" fill="none" stroke="rgba(200,149,42,0.2)" stroke-width="0.75"/>
+        <line x1="250" y1="264" x2="250" y2="434" stroke="rgba(200,149,42,0.2)" stroke-width="0.75"/>
+        <text x="250" y="476" fill="#C8952A" font-family="Space Mono,monospace" font-size="8.5" text-anchor="middle" opacity="0.6">CLAIMS</text>
+
+        <!-- ARCH — left -->
+        <circle cx="50" cy="250" r="9" fill="rgba(242,237,228,0.1)"/>
+        <circle cx="50" cy="250" r="16" fill="none" stroke="rgba(242,237,228,0.07)" stroke-width="0.75"/>
+        <line x1="66" y1="250" x2="236" y2="250" stroke="rgba(242,237,228,0.08)" stroke-width="0.75"/>
+        <text x="8" y="238" fill="rgba(242,237,228,0.3)" font-family="Space Mono,monospace" font-size="8.5" text-anchor="start">ARCH.</text>
+
+        <!-- Diagonal secondary nodes -->
+        <circle cx="392" cy="108" r="5" stroke="rgba(200,149,42,0.5)" stroke-width="0.75" fill="none"/>
+        <line x1="388" y1="112" x2="263" y2="237" stroke="rgba(200,149,42,0.2)" stroke-width="0.5"/>
+
+        <circle cx="392" cy="392" r="5" stroke="rgba(242,237,228,0.2)" stroke-width="0.75" fill="none"/>
+        <line x1="388" y1="388" x2="263" y2="263" stroke="rgba(242,237,228,0.08)" stroke-width="0.5"/>
+
+        <circle cx="108" cy="392" r="5" stroke="rgba(200,149,42,0.3)" stroke-width="0.75" fill="none"/>
+        <line x1="112" y1="388" x2="237" y2="263" stroke="rgba(200,149,42,0.15)" stroke-width="0.5"/>
+
+        <circle cx="108" cy="108" r="5" stroke="rgba(242,237,228,0.15)" stroke-width="0.75" fill="none"/>
+        <line x1="112" y1="112" x2="237" y2="237" stroke="rgba(242,237,228,0.07)" stroke-width="0.5"/>
+
+        <!-- Micro data dots -->
+        <circle cx="195" cy="160" r="2" fill="#C8952A" opacity="0.35"/>
+        <circle cx="335" cy="178" r="2" fill="rgba(242,237,228,0.2)"/>
+        <circle cx="315" cy="330" r="2" fill="#C8952A" opacity="0.25"/>
+        <circle cx="172" cy="305" r="2" fill="rgba(242,237,228,0.15)"/>
+        <circle cx="220" cy="340" r="1.5" fill="#C8952A" opacity="0.2"/>
+        <circle cx="360" cy="215" r="1.5" fill="rgba(242,237,228,0.12)"/>
+
+        <!-- Bottom label -->
+        <text x="250" y="494" fill="rgba(242,237,228,0.12)" font-family="Space Mono,monospace" font-size="7" text-anchor="middle" letter-spacing="3">PROSPERITY · GUIDEWIRE SYSTEMS</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     02 — METHODOLOGY
+============================================================ -->
+<section id="methodology">
+  <div class="section-wrap">
+    <div class="section-inner">
+
+      <div class="method-header">
+        <div>
+          <div class="eyebrow reveal">The Methodology</div>
+          <h2 class="sec-title reveal d1">Three Pillars of<br>Guidewire Excellence</h2>
+        </div>
+        <p class="sec-sub reveal d2" style="margin-bottom: 0;">
+          A philosophy forged across 16 years of P&C insurance implementations — from first-line code to enterprise architecture, from regional carriers to tier-1 insurers.
+        </p>
+      </div>
+
+      <div class="bento">
+
+        <!-- Pillar 1: Architecture -->
+        <div class="bento-cell reveal">
+          <div class="bento-index">01 / Architecture</div>
+          <div class="bento-icon-wrap">
+            <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="16" height="16" stroke="#C8952A" stroke-width="0.9" opacity="0.9"/>
+              <rect x="23" y="3" width="16" height="16" stroke="#C8952A" stroke-width="0.9" opacity="0.45"/>
+              <rect x="3" y="23" width="16" height="16" stroke="#C8952A" stroke-width="0.9" opacity="0.45"/>
+              <rect x="23" y="23" width="16" height="16" stroke="#C8952A" stroke-width="0.9" opacity="0.2"/>
+              <line x1="21" y1="3" x2="21" y2="39" stroke="#C8952A" stroke-width="0.4" opacity="0.3" stroke-dasharray="2 3"/>
+              <line x1="3" y1="21" x2="39" y2="21" stroke="#C8952A" stroke-width="0.4" opacity="0.3" stroke-dasharray="2 3"/>
+            </svg>
+          </div>
+          <h3 class="bento-name"><em>Systems</em><br>Architecture</h3>
+          <p class="bento-copy">Designing Guidewire ecosystems that handle enterprise complexity — multi-company, multi-state, multi-line — without creating technical debt or sacrificing delivery velocity. Patterns that outlast the project, built to be maintained by the teams who inherit them.</p>
+          <div class="chip-row">
+            <span class="chip">PolicyCenter</span>
+            <span class="chip">BillingCenter</span>
+            <span class="chip">ClaimCenter</span>
+            <span class="chip">Integration Design</span>
+            <span class="chip">Gosu</span>
+          </div>
+        </div>
+
+        <!-- Pillar 2: Delivery -->
+        <div class="bento-cell reveal d1">
+          <div class="bento-index">02 / Delivery</div>
+          <div class="bento-icon-wrap">
+            <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="21" cy="21" r="17" stroke="#C8952A" stroke-width="0.9" opacity="0.9"/>
+              <circle cx="21" cy="21" r="9" stroke="#C8952A" stroke-width="0.9" opacity="0.4"/>
+              <circle cx="21" cy="21" r="3" fill="#C8952A" opacity="0.8"/>
+              <line x1="21" y1="4" x2="21" y2="12" stroke="#C8952A" stroke-width="0.9" opacity="0.6"/>
+              <line x1="21" y1="30" x2="21" y2="38" stroke="#C8952A" stroke-width="0.9" opacity="0.6"/>
+              <line x1="4" y1="21" x2="12" y2="21" stroke="#C8952A" stroke-width="0.9" opacity="0.6"/>
+              <line x1="30" y1="21" x2="38" y2="21" stroke="#C8952A" stroke-width="0.9" opacity="0.6"/>
+            </svg>
+          </div>
+          <h3 class="bento-name"><em>End-to-End</em><br>Delivery</h3>
+          <p class="bento-copy">Full lifecycle implementation leadership — from discovery and requirements through configuration, integration, testing, and production go-live. Bridging business stakeholders and engineering teams without ambiguity. Across personal, commercial, and specialty lines.</p>
+          <div class="chip-row">
+            <span class="chip">Tech Lead</span>
+            <span class="chip">Solution Architect</span>
+            <span class="chip">Go-Live</span>
+            <span class="chip">Data Migration</span>
+            <span class="chip">QA Strategy</span>
+          </div>
+        </div>
+
+        <!-- Pillar 3: Transformation -->
+        <div class="bento-cell reveal d2">
+          <div class="bento-index">03 / Transformation</div>
+          <div class="bento-icon-wrap">
+            <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 3 L39 13 L39 29 L21 39 L3 29 L3 13 Z" stroke="#C8952A" stroke-width="0.9" opacity="0.9"/>
+              <path d="M21 10 L32 16.5 L32 25.5 L21 32 L10 25.5 L10 16.5 Z" stroke="#C8952A" stroke-width="0.5" opacity="0.4"/>
+              <circle cx="21" cy="21" r="3.5" stroke="#C8952A" stroke-width="0.75" opacity="0.6"/>
+            </svg>
+          </div>
+          <h3 class="bento-name"><em>Carrier</em><br>Transformation</h3>
+          <p class="bento-copy">Translating carrier business strategy into executable Guidewire roadmaps. Modernizing legacy systems for the agility P&C insurance demands. Right-sizing approach to carrier scale — the same rigour applied to a regional specialty insurer as to a national enterprise carrier.</p>
+          <div class="chip-row">
+            <span class="chip">Legacy Modernization</span>
+            <span class="chip">Roadmap Design</span>
+            <span class="chip">Enterprise</span>
+            <span class="chip">Regional Carriers</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     03 — PROVEN IMPACT
+============================================================ -->
+<section id="impact">
+  <div class="section-wrap">
+    <div class="section-inner">
+
+      <div class="impact-head">
+        <div>
+          <div class="eyebrow reveal">Proven Impact</div>
+          <h2 class="sec-title reveal d1">Career Milestones<br>That Define the Practice</h2>
+        </div>
+        <p class="sec-sub reveal d2" style="margin-bottom: 0;">
+          A record built across three Guidewire suites, every line of P&C business, and carriers from regional specialists to enterprise national insurers.
+        </p>
+      </div>
+
+      <!-- Milestone 1 -->
+      <div class="impact-row reveal">
+        <div class="metric-block">
+          <div class="metric-record">REF: GW-001</div>
+          <div class="metric-val">16+</div>
+          <div class="metric-desc">Years of Active<br>Guidewire Delivery</div>
+          <div class="metric-badge">Career Span</div>
+        </div>
+        <div class="impact-content">
+          <h3 class="impact-title">From Developer to Architect: A Deliberate Ascent Across Every Tier of the Guidewire Stack</h3>
+          <div class="sar-block">
+            <div class="sar-label">Situation</div>
+            <p class="sar-text">P&C insurance carriers consistently struggled to find practitioners with hands-on depth across the full Guidewire suite — talent capable of operating credibly at both the implementation level and the enterprise architecture level, without blind spots at either end.</p>
+          </div>
+          <div class="sar-block">
+            <div class="sar-label">Action</div>
+            <p class="sar-text">Progressed deliberately through every significant role in the Guidewire delivery lifecycle — Developer, Senior Developer, Tech Lead, Solution Architect, and Guidewire Architect — accumulating institutional knowledge across PolicyCenter, BillingCenter, and ClaimCenter, and across small, mid-market, and large enterprise carrier environments.</p>
+          </div>
+          <div class="sar-block">
+            <div class="sar-label">Result</div>
+            <p class="sar-text">Emerged as a full-spectrum Guidewire practitioner equally capable of writing production-grade Gosu, designing integration architecture, advising on product roadmap, and leading cross-functional delivery teams — bringing a practitioner's credibility to every advisory engagement at Prosperity.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Milestone 2 -->
+      <div class="impact-row reveal">
+        <div class="metric-block">
+          <div class="metric-record">REF: GW-002</div>
+          <div class="metric-val">3<span style="font-size:0.6em; color: var(--gold); vertical-align: middle;">×</span></div>
+          <div class="metric-desc">Guidewire Suite<br>Product Mastery</div>
+          <div class="metric-badge">Product Coverage</div>
+        </div>
+        <div class="impact-content">
+          <h3 class="impact-title">Multi-Suite Implementation Leadership Across the Full P&C Value Chain</h3>
+          <div class="sar-block">
+            <div class="sar-label">Situation</div>
+            <p class="sar-text">Enterprise P&C carriers required a unified technical strategy spanning policy administration, billing operations, and claims management — three distinct Guidewire products, each with its own configuration model, integration patterns, and organizational complexity. Most specialists operated within a single product silo.</p>
+          </div>
+          <div class="sar-block">
+            <div class="sar-label">Action</div>
+            <p class="sar-text">Led and contributed to implementations across all three core Guidewire suites — PolicyCenter for underwriting and policy lifecycle management, BillingCenter for premium collection and payment processing, and ClaimCenter for FNOL through settlement — developing cross-suite architectural coherence and reusable integration patterns that reduced project risk at each successive engagement.</p>
+          </div>
+          <div class="sar-block">
+            <div class="sar-label">Result</div>
+            <p class="sar-text">Delivered consistently high-quality implementations with reduced integration risk, cleaner data models, and configuration approaches that scale without accumulating technical debt — establishing the cross-suite pattern library that now forms the core of Prosperity's implementation methodology.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Milestone 3 -->
+      <div class="impact-row reveal">
+        <div class="metric-block">
+          <div class="metric-record">REF: GW-003</div>
+          <div class="metric-val" style="font-size: 2.2rem; padding-top: 0.3rem;">S → L</div>
+          <div class="metric-desc">Small to Large<br>Carrier Adaptability</div>
+          <div class="metric-badge">Scale Range</div>
+        </div>
+        <div class="impact-content">
+          <h3 class="impact-title">Calibrating Guidewire Strategy to the Carrier — Not Forcing the Carrier to Fit the Strategy</h3>
+          <div class="sar-block">
+            <div class="sar-label">Situation</div>
+            <p class="sar-text">Insurance carriers of different sizes face fundamentally different implementation challenges. A regional specialty insurer cannot absorb the governance overhead of a tier-1 enterprise delivery model — yet both demand production-ready systems that won't buckle at renewal season or a claims surge. One-size solutions fail both.</p>
+          </div>
+          <div class="sar-block">
+            <div class="sar-label">Action</div>
+            <p class="sar-text">Applied a contextual implementation methodology across the full carrier spectrum — right-sizing architecture complexity, configuration governance, and team structure to match each organization's maturity, IT budget, and business velocity. Built reusable frameworks adaptable across carrier profiles, applying consistent principles without imposing unnecessary overhead on smaller organizations.</p>
+          </div>
+          <div class="sar-block">
+            <div class="sar-label">Result</div>
+            <p class="sar-text">Successful deliveries across small specialty carriers, mid-market regional companies, and large national insurers — with each engagement building a compounding playbook of implementation patterns and avoidable pitfalls that now anchors Prosperity's independent consulting practice.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     04 — LEADERSHIP & LEGACY
+============================================================ -->
+<section id="legacy">
+  <div class="section-wrap">
+    <div class="section-inner">
+
+      <div class="eyebrow reveal">Leadership & Legacy</div>
+
+      <div class="mantra-section reveal d1">
+        <span class="quote-glyph" aria-hidden="true">"</span>
+        <blockquote class="mantra-text">
+          The best insurance systems don't just process transactions — they protect people at their most vulnerable moments. Every architecture decision, every configuration choice, every integration pattern carries that weight. That's what makes this work matter beyond the technology.
+        </blockquote>
+        <div class="mantra-attr">Founding Principal, Prosperity Consulting</div>
+      </div>
+
+      <div class="legacy-cards">
+
+        <div class="l-card reveal">
+          <div class="l-card-icon">
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+              <rect x="2" y="6" width="30" height="22" stroke="#C8952A" stroke-width="0.9" opacity="0.75"/>
+              <line x1="2" y1="13" x2="32" y2="13" stroke="#C8952A" stroke-width="0.5" opacity="0.4"/>
+              <circle cx="8" cy="9.5" r="1.5" fill="#C8952A" opacity="0.6"/>
+              <circle cx="13" cy="9.5" r="1.5" fill="#C8952A" opacity="0.3"/>
+              <circle cx="18" cy="9.5" r="1.5" fill="rgba(242,237,228,0.2)"/>
+              <line x1="7" y1="19" x2="20" y2="19" stroke="rgba(242,237,228,0.2)" stroke-width="0.5"/>
+              <line x1="7" y1="23" x2="27" y2="23" stroke="rgba(242,237,228,0.12)" stroke-width="0.5"/>
+            </svg>
+          </div>
+          <h4 class="l-card-title">Advisory & Strategic Consulting</h4>
+          <p class="l-card-body">Available for strategic advisory engagements with P&C carriers evaluating Guidewire modernization, platform selection, or digital transformation initiatives. Independent, objective counsel from a practitioner with no product allegiances and a 16-year pattern library.</p>
+        </div>
+
+        <div class="l-card reveal d1">
+          <div class="l-card-icon">
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+              <circle cx="17" cy="11" r="6" stroke="#C8952A" stroke-width="0.9" opacity="0.75"/>
+              <path d="M5 30 C5 22 29 22 29 30" stroke="#C8952A" stroke-width="0.9" opacity="0.5" stroke-linecap="round"/>
+              <line x1="24" y1="17" x2="31" y2="11" stroke="#C8952A" stroke-width="0.5" opacity="0.4" stroke-dasharray="2 2"/>
+              <circle cx="31" cy="10" r="2.5" stroke="#C8952A" stroke-width="0.7" opacity="0.45" fill="none"/>
+            </svg>
+          </div>
+          <h4 class="l-card-title">Technical Mentorship</h4>
+          <p class="l-card-body">Committed to building the next generation of Guidewire practitioners — from developers configuring their first PolicyCenter screen to senior engineers expanding into solution architecture. Deep investment in knowledge transfer and team capability elevation on client engagements.</p>
+        </div>
+
+        <div class="l-card reveal d2">
+          <div class="l-card-icon">
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+              <path d="M17 2 L32 10 L32 24 L17 32 L2 24 L2 10 Z" stroke="#C8952A" stroke-width="0.9" opacity="0.75"/>
+              <path d="M17 8 L26 13 L26 21 L17 26 L8 21 L8 13 Z" stroke="#C8952A" stroke-width="0.5" opacity="0.35"/>
+              <path d="M10 17 L14 21 L23 12" stroke="#C8952A" stroke-width="1.2" opacity="0.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h4 class="l-card-title">Speaking & Knowledge Sharing</h4>
+          <p class="l-card-body">Bringing 16 years of front-line Guidewire experience to industry panels, organizational workshops, and knowledge-sharing sessions. Topics: P&C digital transformation, Guidewire implementation strategy, carrier modernization roadmaps, and building high-performance insurance technology teams.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     05 — CONNECT / CTA
+============================================================ -->
+<section id="connect">
+  <div class="section-wrap">
+    <div class="section-inner" style="max-width: 720px; text-align: center;">
+      <div class="eyebrow reveal" style="justify-content: center; margin-bottom: 2rem;">
+        Engage Prosperity
+      </div>
+      <h2 class="connect-title reveal d1">
+        Ready to build something<br>that actually <em>lasts</em>?
+      </h2>
+      <p class="connect-sub reveal d2">
+        Whether you're evaluating a Guidewire implementation, navigating a complex modernization, or seeking independent advisory on your P&C technology roadmap — let's start a conversation.
+      </p>
+      <div class="btn-row reveal d3">
+        <a href="mailto:hello@prosperityconsulting.com" class="btn-fill">
+          Start a Conversation &nbsp;→
+        </a>
+        <a href="https://www.linkedin.com/in/" target="_blank" rel="noopener noreferrer" class="btn-ghost">
+          Connect on LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span>P</span>rosperity Consulting</div>
+    <ul class="footer-nav">
+      <li><a href="mailto:hello@prosperityconsulting.com">Email</a></li>
+      <li><a href="https://www.linkedin.com/in/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="#methodology">Methodology</a></li>
+      <li><a href="#impact">Impact</a></li>
+      <li><a href="#legacy">Leadership</a></li>
+    </ul>
+    <div class="footer-copy">© 2025 Prosperity Consulting · Guidewire P&C Technology Advisory</div>
+  </div>
+</footer>
+
+
+<!-- ============================================================
+     SCRIPTS
+============================================================ -->
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(el => revealObserver.observe(el));
+
+  // Nav: elevate on scroll
+  const nav = document.getElementById('top-nav');
+  window.addEventListener('scroll', () => {
+    nav.style.borderBottomColor = window.scrollY > 60
+      ? 'rgba(242,237,228,0.13)'
+      : 'rgba(242,237,228,0.07)';
+  }, { passive: true });
+
+  // Active nav link on scroll
+  const sections = ['methodology', 'impact', 'legacy', 'connect'];
+  const navLinks = document.querySelectorAll('.nav-center a');
+
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.style.color = link.getAttribute('href') === '#' + entry.target.id
+            ? 'rgba(200,149,42,0.85)'
+            : '';
+        });
+      }
+    });
+  }, { threshold: 0.45 });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) sectionObserver.observe(el);
+  });
+</script>
+
+</body>
+</html>
